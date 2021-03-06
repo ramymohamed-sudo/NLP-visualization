@@ -11,8 +11,31 @@ url = 'https://raw.githubusercontent.com/laxmimerit/twitter-disaster-prediction-
 tweeter = pd.read_csv(url)
 tweeter.head()
 
+!pip install git+https://github.com/laxmimerit/preprocess_kgptalkie.git --upgrade --force-reinstall
+import preprocess_kgptalkie as kgp
+tweet = kgp.get_basic_features(tweeter)
 
-""" sns.countplot """ 
+""" Matplotlib plt.pie """ 
+axes2 = figure.add_subplot(1,2,2)
+axes2.set_title("Pie Chart")
+axes2.pie(tweeter.target.value_counts(),labels=["0","1"],
+#explode = [0.1,0],
+autopct = "%1.2f%%"	# 1 for numbers and 1f for decimal point
+)
+
+""" Matplotlib plt.bar """ 
+freqs = kgp.get_word_freqs(tweet,col='text')
+top20 = freqs[:20]
+freqs[:5]
+figure = plt.figure()
+figure.figsize = [4,4]
+figure.dpi = 80
+axes = figure.add_subplot(1,1,1)
+axes.set_title("Distribution ...")
+axes.bar(top20.index,top20.values)
+plt.xticks(rotation=70,ha='right')	
+
+""" 1- sns.countplot """ 
 figure = plt.figure()
 figure.figsize = [8,4]
 figure.dpi = 80
@@ -23,21 +46,7 @@ sns.countplot('target',data=tweeter)
 # axes.set_xlabel("")
 # axes.plot([x],[y])
 
-
-""" Matplotlib plt.pie """ 
-axes2 = figure.add_subplot(1,2,2)
-axes2.set_title("Pie Chart")
-axes2.pie(tweeter.target.value_counts(),labels=["0","1"],
-#explode = [0.1,0],
-autopct = "%1.2f%%"	# 1 for numbers and 1f for decimal point
-)
-
-
-!pip install git+https://github.com/laxmimerit/preprocess_kgptalkie.git --upgrade --force-reinstall
-import preprocess_kgptalkie as kgp
-tweet = kgp.get_basic_features(tweeter)
-
-""" sns.distplot """
+""" 2- sns.distplot """
 figure = plt.figure()
 figure.figsize = [8,4]
 figure.dpi = 80
@@ -45,7 +54,7 @@ axes = figure.add_subplot(1,1,1)
 axes.set_title("Distribution")
 sns.distplot(tweet['char_counts'])	
 
-""" sns.kdeplot -> plots the distribution of the data column """
+""" 3- sns.kdeplot -> plots the distribution of the data column """
 figure = plt.figure()
 figure.figsize = [4,4]
 figure.dpi = 80
@@ -57,7 +66,7 @@ sns.kdeplot(tweet[tweet['target']==1]['char_counts'],shade=True, color='red', la
 sns.kdeplot(tweet[tweet['target']==0]['char_counts'],shade=True, color='blue', label='zero')
 axes.legend()
 
-""" cat.kdeplot """
+""" 4- cat.kdeplot """
 sns.catplot(y='char_counts',data=tweet,kind='violin',col='target')
 
 
