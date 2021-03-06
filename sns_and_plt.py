@@ -45,7 +45,7 @@ axes = figure.add_subplot(1,1,1)
 axes.set_title("Distribution")
 sns.distplot(tweet['char_counts'])	
 
-""" sns.kdeplot """
+""" sns.kdeplot -> plots the distribution of the data column """
 figure = plt.figure()
 figure.figsize = [4,4]
 figure.dpi = 80
@@ -53,8 +53,9 @@ axes = figure.add_subplot(1,1,1)
 axes.set_title("Distribution ...")
 sns.kdeplot(tweet['char_counts'],shade=True)
 
-sns.kdeplot(tweet[tweet['target']==1]['char_counts'],shade=True)
-sns.kdeplot(tweet[tweet['target']==0]['char_counts'],shade=True)
+sns.kdeplot(tweet[tweet['target']==1]['char_counts'],shade=True, color='red', label='one')
+sns.kdeplot(tweet[tweet['target']==0]['char_counts'],shade=True, color='blue', label='zero')
+axes.legend()
 
 """ cat.kdeplot """
 sns.catplot(y='char_counts',data=tweet,kind='violin',col='target')
